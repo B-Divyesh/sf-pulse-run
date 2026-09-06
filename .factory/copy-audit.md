@@ -92,6 +92,17 @@ Interface labels also audited: Track (1), Time (1), Seed (1), Score (1), Setting
 
 Dynamic score, streak, time, and track values are numbers rather than prose.
 
+## 404 recovery page
+
+| Copy | Words | Result |
+| --- | ---: | --- |
+| Error 404 | 2 | Pass |
+| Page not found | 3 | Pass |
+| The address does not match a Pulse Run page. | 9 | Pass |
+| Return to the game | 4 | Pass |
+| Pulse Run is a three-minute single-player rhythm game. | 8 | Pass |
+| Built by Param Factory. | 4 | Pass |
+
 ## Terminology
 
 | Concept | Required word |
