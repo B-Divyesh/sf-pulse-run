@@ -1,0 +1,65 @@
+[
+  {
+    "id": "complete-run",
+    "claim": "A complete run lasts six 30-second tracks and reaches a win or loss screen.",
+    "where": "first screen, How it works, README",
+    "test": "npm run test:e2e -- --grep @claim:complete-run",
+    "sandbox": "fresh browser context at /demo?qa=1; deterministic simulation; assert six tracks, 180000 ms, five choices, and visible win screen"
+  },
+  {
+    "id": "three-misses",
+    "claim": "Three missed phrases end a run.",
+    "where": "game goal, How it works, README",
+    "test": "npm run test:e2e -- --grep @claim:three-misses",
+    "sandbox": "fresh browser context at /demo?qa=1; advance the deterministic game without input; assert exactly three misses and visible loss screen"
+  },
+  {
+    "id": "restart-reset",
+    "claim": "Play again resets the track, score, misses, and run changes.",
+    "where": "end screen, README",
+    "test": "npm run test:e2e -- --grep @claim:restart-reset",
+    "sandbox": "finish the deterministic sample; use Play again; inspect the new observable game state"
+  },
+  {
+    "id": "settings-persist",
+    "claim": "Real-run sound, assist, and remapped key settings stay in this browser.",
+    "where": "settings dialog, privacy page, README",
+    "test": "npm run test:e2e -- --grep @claim:settings-persist",
+    "sandbox": "leave demo for a real run; change all three setting types; reload in the same clean browser context; verify controls restore"
+  },
+  {
+    "id": "local-play-data",
+    "claim": "Sample gameplay sends no gameplay or play data to another origin.",
+    "where": "first-screen fact, privacy page, README",
+    "test": "npm run test:e2e -- --grep @claim:local-play-data",
+    "sandbox": "record every request through an entire sample finish and restart; assert requests are same-origin and no local-storage entry is created"
+  },
+  {
+    "id": "demo-isolation",
+    "claim": "The sample does not read or change real-run storage.",
+    "where": "demo banner, privacy page, demo documentation",
+    "test": "npm run test:e2e -- --grep @claim:demo-isolation",
+    "sandbox": "seed real storage with a sentinel, lose and reset the sample, then assert the sentinel is unchanged and sample state resets"
+  },
+  {
+    "id": "one-time-offer",
+    "claim": "Pulse Run Complete costs $5 USD once and is not a subscription.",
+    "where": "first-screen fact, pricing, license page, terms, public offer metadata",
+    "test": "npm run test:e2e -- --grep @claim:one-time-offer",
+    "sandbox": "fetch public offer metadata and compare the price type, amount, currency, deliverables, and unavailable checkout state with the visible offer"
+  },
+  {
+    "id": "input-modes",
+    "claim": "Notes can be played with the keyboard and the four touch controls.",
+    "where": "first-screen fact, game controls, README",
+    "test": "npm run test:e2e -- --grep @claim:input-modes",
+    "sandbox": "place deterministic playable notes, press the mapped keyboard key and touch control, and assert both increase score"
+  },
+  {
+    "id": "frame-rate",
+    "claim": "The game targets 60 fps and measures at least 50 fps in a phone-sized browser under 4x CPU throttling.",
+    "where": "design thesis and handoff",
+    "test": "npm run test:e2e -- --grep @claim:frame-rate",
+    "sandbox": "390x844 Chromium viewport, 4x CPU throttling, active seeded sample, two-second requestAnimationFrame measurement"
+  }
+]
