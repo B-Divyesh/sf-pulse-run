@@ -30,7 +30,7 @@ Spacing follows 8 px increments. The working width is 1,180 px, text measures st
 
 ## Interaction grammar
 
-Buttons depress against hard offset shadows. Notes travel only toward a fixed judgement line. Each lane always keeps one color and one key label. Modifier selection stops time and uses two large text choices. The game offers keyboard, touch, remapped keys, and a wider-timing setting.
+Buttons depress against hard offset shadows. Notes travel only toward a fixed judgement line. Each lane always keeps one color and one key label. Modifier selection stops time and uses two large text choices. The game offers keyboard, touch, remapped keys, and a wider-timing setting. Its six free changes have distinct effects: Wide window increases timing tolerance, Phrase shield blocks one miss, Score push changes score and timing, Lane turn changes controls, Extra taps changes note density, and Steady count uses a repeating lane pattern.
 
 The difficulty curve spans six 30-second tracks. The base pattern asks for two hits per four-note phrase. Each track adds one player-selected modifier. Three missed phrases end the run, so the loss state is clear and finite.
 
