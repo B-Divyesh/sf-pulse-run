@@ -303,6 +303,7 @@ h3 {
 }
 
 .demo-banner button.secondary {
+  background: transparent;
   color: var(--night-deep);
   border-color: var(--night-deep);
 }
