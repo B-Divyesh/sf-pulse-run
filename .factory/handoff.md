@@ -6,51 +6,32 @@ Live product: <https://pulse-run.sociobot.in>
 
 Artifact class: `browser-game`
 
-## Independent verification 1 — FAIL
+## Status
 
-Independent QA reviewed implementation `369aedae71a4bfb2eefbd6c4805d8902ed3e2e6b` and documentation/report baseline `0a659c9b741afff59f6119c9e06f76d4f24b4693`. The candidate's live JS and CSS assets match the local production build. The clean setup (`npm ci`, `npm test`, `npm run build`) passed, as did all nine declared claim commands and live accessibility/basic-route checks.
-
-The product is nevertheless **not accepted**. A fresh iPhone 13-sized browser has no game canvas in its initial 390 × 664 viewport, which violates the browser-game first-screen requirement. The landing modifier statement is false for Phrase shield, and the claim registry is incomplete for seven public promises. See [`.factory/verification-1.md`](verification-1.md) for findings, command evidence, prior-finding disposition, and reproduction details.
-
-No product code was changed by this verifier. Repair the mobile first screen and public-claim/test gaps, then perform a new independent verification.
+The recorded repair findings are resolved. Pulse Run is a finite single-player keyboard rhythm run for players who want a short browser game without an account. The landing h1 says **Play a three-minute rhythm run**. Before scrolling, visitors see who it is for, **Try it with sample data**, and a visible working game canvas.
 
 ## Version record
 
-- Implementation and documentation baseline: `369aedae71a4bfb2eefbd6c4805d8902ed3e2e6b`
-- Deployed artifact: production `dist/` built from that SHA
-- Handoff: the report-only commit containing this file follows the deployed SHA and does not require another product image
-- Starting scaffold: `77a9b606fb2ec155634b577fe051c67bf0d80cf8`
+- Implementation and deployed artifact: `5eb3e9ab34da8f393985c40286591be8e0989ef6` (`repair mobile game entry and public claims`)
+- Verification documentation baseline: `502ce5cc698a1682284204745c399c2f624d277e` (`record repair verification`)
+- This handoff is a report-only commit after those two commits; it makes no product-code change.
+- Previous independent verification: [`verification-1.md`](verification-1.md), fail recorded at `4ec9f55d4ad41219f509b04d0eef69f8f7e8969c`
+- Current repair verification: [`verification-2.md`](verification-2.md)
 
-The admitted repository contained only the factory scaffold. There was no earlier implementation, design thesis, verification report, or completed handoff. The complete earlier Git history was the single scaffold commit.
+## What changed
 
-## What shipped
+- Made the phone first screen compact enough to show 148.86 px of the real game canvas in a 390 × 664 viewport; the regression test requires at least 96 px.
+- Corrected the run-change statement. Phrase shield now fits the claim, and Steady count now changes the note pattern instead of doing nothing.
+- Added outcome-based coverage for every public claim, including all four remapped keys, all six free run changes, gesture-gated audio, real/sample local data boundaries, account-free entry, assist timing, privacy deletion, and single-player built-in scope.
+- Kept the researched one-time offer: Pulse Run Complete is **$5 USD once**, not a subscription. It adds Copper, Paper, and Glass percussion sets; it never adds ads.
+- Replaced untestable public wording about audio with precise “synthesized percussion” wording, backed by the gesture/no-recording browser check.
+- Copied public offer metadata to `/work/.evidence/billing-offer.json` and the 98-character verb-first catalog line to `/work/.evidence/catalog-description.txt`.
 
-- A deterministic, single-player, three-minute rhythm run with six 30-second tracks.
-- A four-lane Canvas game with keyboard, remapped-key, pointer, and touch input.
-- Three-missed-phrase loss, five between-track choices, win and loss summaries, and one-action restart.
-- A fixed 60 Hz simulation with `requestAnimationFrame` rendering, clamped time, hidden-tab pause, and saved real-run recovery.
-- Gesture-gated Web Audio percussion with the free Circuit arrangement.
-- Three additional finished 16-step arrangements—Copper, Paper, and Glass—for Pulse Run Complete.
-- Sound, reduced-effects, and wider-timing settings. Real settings persist locally.
-- A one-click `/demo` sample with an active seeded run, populated prior result, persistent sample banner, reset, and in-memory isolation.
-- Product routes for `/`, `/demo`, `/privacy`, `/terms`, and `/license`, plus a styled HTTP 404 response.
-- Hand-authored Canvas, CSS, favicon, and 1200×630 social-card art. Provenance is in `.factory/design.md`.
-- Responsive first screens for desktop and phone, 44 px targets, 200% text support, focus management, reduced-motion handling, and semantic landmarks.
-- CSP, permissions, referrer, frame, and content-type headers through the Static Web App configuration.
+The researched non-goals remain: no imported songs, user charts, copyrighted recordings, rankings, accounts, ads, analytics, or multiplayer. The visual system remains the printed rhythm instrument described in [`design.md`](design.md), with hand-authored Canvas/CSS and locally synthesized percussion only.
 
-The brief's non-goals remain intact: no imported songs, copyrighted audio, user charts, rankings, accounts, advertising, analytics, or multiplayer claim.
+## How to run and verify
 
-## Public offer
-
-Pulse Run Complete is **$5 USD once**, not a subscription. It adds the Copper, Paper, and Glass original percussion sets. The free game remains a complete six-track run with Circuit and six run changes.
-
-Public metadata exists at `/billing-offer.json`, `.factory/billing-offer.json`, and `/work/.evidence/billing-offer.json`. The catalog description is mirrored to `/work/.evidence/catalog-description.txt`.
-
-Checkout registration and entitlement validation are not available. The `/license` route says this directly. No checkout, payment, or activation was attempted or reported as passing.
-
-## Verification
-
-Final clean checkout: `/tmp/pulse-run-clean-369aeda`
+Requirements: Node.js 20+ and npm.
 
 ```sh
 npm ci
@@ -58,51 +39,28 @@ npm test
 npm run build
 ```
 
-Results from the clean checkout:
+From the fresh clone `/tmp/pulse-run-clean-5eb3e9a`:
 
 - `npm ci`: 61 packages installed, 0 vulnerabilities.
-- Vitest: 6 deterministic simulation tests passed.
-- Playwright: 26 browser checks passed in Chromium.
-- Every command in `.factory/claims.json` ran separately and passed.
-- Build output: 35.91 KB JavaScript (11.13 KB gzip), 11.92 KB CSS (3.57 KB gzip), and `dist/` created.
-- Throttled phone-size frame measurement: 60.0 fps under 4× CPU throttling; the claim threshold is 50 fps.
+- `npm test`: 6 Vitest tests and 33 Playwright tests passed.
+- All 16 commands in [`.factory/claims.json`](claims.json) were run separately and passed.
+- `npm run build`: created `dist/`; JavaScript is 36.57 KB (11.39 KB gzip) and CSS is 12.24 KB (3.65 KB gzip).
+- The suite covers deterministic win/loss, restart, choices, keyboard/touch/remapped input, settings, refresh recovery, demo reset/isolation, phone layout, focus, reduced motion, 200% text, routes, designed 404, and axe scans.
 
-Browser coverage includes complete win, three-miss loss, restart reset, choices, keyboard and touch scoring, invalid duplicate mappings, settings persistence, refresh recovery, sample reset isolation, local request boundaries, route titles, History API focus, dialog focus, reduced motion, 44 px targets, 200% text, and mobile overflow.
+Live verification after deployment:
 
-Accessibility results:
+- Fresh desktop and 390 × 664 phone contexts have no console/page errors. The phone canvas begins at y=515.14, leaving 148.86 px visible in the first viewport.
+- One click opened `/demo`, showed the persistent demo label and realistic 18,420 previous score, then a no-input run reached **Run ended**. Reset restored track `1 / 6`, score `0`, active play, and empty local storage.
+- `/`, `/demo`, `/privacy`, `/terms`, `/license`, `/billing-offer.json`, `/robots.txt`, and `/sitemap.xml` return 200. An unknown route intentionally returns the designed HTTP 404 page.
+- `verify-url.sh` and live axe scans pass. Lighthouse mobile scored Performance 100, Accessibility 96, Best Practices 100, SEO 100; LCP 1.0 s, CLS 0.
+- Live JavaScript/CSS SHA-256 hashes match local `dist/`. HTTPS sends CSP, HSTS, permissions, referrer, frame, and content-type protections.
 
-- Axe Playwright scans on `/`, `/demo`, `/privacy`, `/terms`, and `/license`: 0 serious or critical issues.
-- Worker `verify-url.sh` on live HTTPS: title present, `lang=en`, one `h1`, main landmark present, no missing alt text, no unlabeled buttons, and no console errors.
-- Live Lighthouse mobile: Performance 100, Accessibility 96, Best Practices 100, SEO 100.
-- Live metrics: LCP 1.0 s, FCP 0.9 s, CLS 0, TBT 0 ms.
-
-Live checks:
-
-- Fresh desktop and phone browser contexts loaded without console or page errors.
-- The first screen states the play, audience, first actions, local-data fact, inputs, and price before scrolling.
-- One click opened the active sample. A real timed no-input run reached the loss screen after three missed phrases.
-- Reset returned the sample to track 1 with score 0 and left local storage empty.
-- All runtime requests during the sample were same-origin.
-- `/`, `/demo`, `/privacy`, `/terms`, `/license`, and `/billing-offer.json` returned 200.
-- An unknown URL returned HTTP 404 with the designed recovery page.
-- Live JavaScript and CSS SHA-256 hashes matched the final local `dist/` files exactly.
-- HTTPS returned CSP, HSTS, permissions, referrer, frame, and content-type protections.
-
-Evidence:
-
-- `.factory/desktop-first-screen.png`
-- `.factory/phone-first-screen.png`
-- `.factory/demo-active-run.png`
-- `.factory/run-end-screen.png`
-- `/work/.evidence/live-desktop-first-screen.png`
-- `/work/.evidence/live-phone-first-screen.png`
-- `/work/.evidence/live-loss-end-screen.png`
-- `/work/.evidence/verify-live-final/verify.json`
+Evidence: `/work/.evidence/pulse-run-repair-2-live/`.
 
 ## Deployment
 
-The final static build was pushed to `main` and deployed to the existing product scope as `sf-pulse-run` in Central US. The product hostname and managed TLS are ready. No backend, database, volume, staging slot, unrelated service, or secret was accessed.
+`5eb3e9a` was pushed to `main` and deployed through the existing `sf-pulse-run` Static Web App in Central US. The existing app, hostname, TLS, and static configuration were reused. No backend, shared database, user data, or unrelated product was accessed.
 
-## Known gap and next step
+## Known dependency and next step
 
-The separate billing operator must register `pulse-run-complete` and provide a real Sociobot entitlement-validation contract. After that integration exists, wire `/license` to it and independently test payment return plus entitlement before claiming activation works. All free-game functionality is available now.
+The separate billing operator still needs to register `pulse-run-complete` and provide an entitlement-validation contract. Checkout and activation remain unavailable and are stated honestly on `/license`; no checkout, payment, or activation was attempted or claimed as successful. Once that contract exists, integrate and independently test entitlement before claiming it works.
