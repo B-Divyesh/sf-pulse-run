@@ -153,6 +153,21 @@ for (const route of ['/', '/demo', '/privacy', '/terms', '/license']) {
   });
 }
 
+test('the phone wordmark names its home action on every application route', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  for (const route of ['/', '/demo', '/privacy', '/terms', '/license']) {
+    await page.goto(route);
+    const homeLink = page.getByRole('link', { name: 'Pulse Run home', exact: true });
+    await expect(homeLink).toBeVisible();
+    await expect(homeLink).toHaveAttribute('href', '/');
+
+    const results = await new AxeBuilder({ page }).analyze();
+    const severe = results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''));
+    expect(severe, `${route}: ${severe.map((violation) => violation.id).join(', ')}`).toEqual([]);
+  }
+});
+
 test('the designed 404 document keeps its recovery styling under the production CSP', async ({ page }) => {
   const errors: string[] = [];
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });

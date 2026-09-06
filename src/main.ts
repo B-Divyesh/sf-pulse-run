@@ -104,7 +104,7 @@ class PulseRunApp {
     return `
       <a class="skip-link" href="#main">Skip to main content</a>
       <header class="site-header">
-        <a class="wordmark" href="/" data-route><span class="wordmark-mark" aria-hidden="true"></span><span>Pulse Run</span></a>
+        <a class="wordmark" href="/" data-route aria-label="Pulse Run home"><span class="wordmark-mark" aria-hidden="true"></span><span>Pulse Run</span></a>
         <nav class="site-nav" aria-label="Main navigation">
           <ul>
             <li><a href="/" data-route ${current === '/' ? 'aria-current="page"' : ''}>Play</a></li>
