@@ -1,0 +1,37 @@
+{
+  "slug": "pulse-run",
+  "title": "Pulse Run",
+  "territory": "games-creative",
+  "user": "Desktop or keyboard players who want a quick rhythm run in a browser without licensed-song dependence, account setup, or downloadable client.",
+  "evidence": [
+    {
+      "url": "https://hn.algolia.com/api/v1/items/48760674",
+      "date": "2026-07-02",
+      "quote_or_summary": "Row to Glory is a browser Viking rhythm game rendered in one HTML file, showing a lightweight web rhythm game can be compelling."
+    },
+    {
+      "url": "https://hn.algolia.com/api/v1/items/47783400",
+      "date": "2026-04-15",
+      "quote_or_summary": "Playbach.io is introduced directly as a desktop browser rhythm game, an independent current signal for the format."
+    },
+    {
+      "url": "https://www.rowtoglory.com",
+      "date": "2026-07-02",
+      "quote_or_summary": "Fetched Row to Glory page corroborates that a browser rhythm game can package an original themed experience."
+    }
+  ],
+  "recurrence": "Two independent browser rhythm releases in spring/summer 2026 indicate renewed interest, while the category is often blocked by music licensing or huge song libraries.",
+  "current_workaround": "Install a dedicated rhythm game, play an ad-heavy clone, or rely on YouTube/extension-driven copyrighted tracks.",
+  "incumbents_and_gap": "Osu!-style ecosystems have depth and setup cost; YouTube rhythm add-ons depend on third-party media. Small browser demos rarely make each run structurally different.",
+  "smallest_useful_product": "A 3-minute keyboard rhythm roguelite with an original generative percussion soundtrack. Between 30-second tracks, choose one modifier that changes note patterns, input lanes, or scoring. Three missed phrases ends a run. Non-goals: imported songs, user charts, copyrighted audio, or competitive ranking.",
+  "success_measure": "At least 30% of new players finish a first run and 20% start a second build in the same visit.",
+  "artifact_class": "browser-game",
+  "monetization": "one-time \u2014 a small original soundtrack and no ads support a finite premium arcade experience.",
+  "constraints": "Commission or synthesize only original audio; meet keyboard accessibility and honor reduced-motion preference; audio must unlock only after a user gesture.",
+  "est_build_effort": "M",
+  "scale": "small (default)",
+  "why_distinct": "Run-building gives original, licensable music replay value rather than copying a song-library rhythm game.",
+  "confidence": 4,
+  "state": "RESEARCHED",
+  "research_run": "research-browser-games-0901-204325-2"
+}
