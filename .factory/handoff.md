@@ -6,6 +6,14 @@ Live product: <https://pulse-run.sociobot.in>
 
 Artifact class: `browser-game`
 
+## Independent verification 1 — FAIL
+
+Independent QA reviewed implementation `369aedae71a4bfb2eefbd6c4805d8902ed3e2e6b` and documentation/report baseline `0a659c9b741afff59f6119c9e06f76d4f24b4693`. The candidate's live JS and CSS assets match the local production build. The clean setup (`npm ci`, `npm test`, `npm run build`) passed, as did all nine declared claim commands and live accessibility/basic-route checks.
+
+The product is nevertheless **not accepted**. A fresh iPhone 13-sized browser has no game canvas in its initial 390 × 664 viewport, which violates the browser-game first-screen requirement. The landing modifier statement is false for Phrase shield, and the claim registry is incomplete for seven public promises. See [`.factory/verification-1.md`](verification-1.md) for findings, command evidence, prior-finding disposition, and reproduction details.
+
+No product code was changed by this verifier. Repair the mobile first screen and public-claim/test gaps, then perform a new independent verification.
+
 ## Version record
 
 - Implementation and documentation baseline: `369aedae71a4bfb2eefbd6c4805d8902ed3e2e6b`
