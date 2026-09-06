@@ -94,3 +94,16 @@ Public offer metadata is mirrored to `/work/.evidence/billing-offer.json`. The 9
 The separate billing operator still needs to register `pulse-run-complete` and provide the entitlement-validation contract. Checkout and activation remain unavailable and are stated that way on `/license`. No checkout, payment, or entitlement was attempted or claimed as working.
 
 Offline play, multiplayer, uploads, user charts, and competitive ranking are not advertised modes. No backend, database, shared service, user credential, or unrelated product was accessed for this repair.
+
+## Verification 3: PASS
+
+Independent verification on 6 September 2026 reviewed implementation `aba0b954a3111835dd9a8a87af1b5f104035ae5c`; the preceding report-only documentation baseline was `f5f0a53f748d0a66c1f01c4970c0a74ebc67fcd3`.
+
+- Fresh detached checkout: `npm ci`, `npm test` (6 unit and 33 browser tests), and `npm run build` passed.
+- Every one of the 16 declared claim commands passed individually. The registry has exactly one matching tagged test per claim.
+- Fresh live desktop and 390 × 664 phone pages name the play, audience, and first action before scrolling, and show the game canvas. The phone has 148.86 px of visible canvas and zero overflow.
+- Live sample entry is one click, keeps its Demo label and realistic 18,420 score, reaches a recorded third-miss loss end screen, and resets without changing seeded real storage.
+- Live routes, internal links, titles, accessibility checks, privacy/storage boundary, CSP-compatible styled 404, and `verify-url.sh` passed. The deliberate unknown-route HTTP 404 is expected; it has no CSP error.
+- Fresh mobile Lighthouse: Performance 100, Accessibility 96, Best Practices 100, SEO 100; LCP 966.732 ms, CLS 0, TBT 26 ms.
+
+There are zero verification findings and zero untested claims. Evidence and the full report are in `.factory/verification-3.md` and `/work/.evidence/pulse-run-verify-3/`.
