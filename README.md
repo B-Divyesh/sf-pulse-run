@@ -8,7 +8,7 @@ Live: <https://pulse-run.sociobot.in>
 
 Use D, F, J, and K, remap those keys, or use the four touch controls. The game synthesizes its original percussion after a play control or rhythm key is pressed. A wider timing setting reduces the precision required.
 
-The free game includes one complete run, the Circuit percussion set, and six run changes. Pulse Run Complete is a $5 USD one-time offer with three more percussion sets and twelve more run changes. It is not a subscription. Checkout and license activation require registration by the Sociobot billing operator. No purchase or activation is presented as working.
+The free game includes one complete run, the Circuit percussion set, and six run changes. Pulse Run Complete is a $5 USD one-time offer with the Copper, Paper, and Glass percussion sets. It is not a subscription. Checkout and license activation require registration by the Sociobot billing operator. No purchase or activation is presented as working.
 
 ## Try the isolated sample
 

@@ -89,10 +89,11 @@ test('@claim:one-time-offer exposes the same $5 one-time public offer on site an
   expect(response.ok()).toBe(true);
   const offer = await response.json() as { price_minor: number; currency: string; price_type: string; paid_features: string[] };
   expect(offer).toMatchObject({ price_minor: 500, currency: 'USD', price_type: 'one_time_price' });
-  expect(offer.paid_features).toHaveLength(2);
+  expect(offer.paid_features).toEqual(['Copper, Paper, and Glass original percussion sets']);
 
   await page.goto('/license');
   await expect(page.getByText('Pulse Run Complete costs $5 USD once. It is not a subscription.')).toBeVisible();
+  await expect(page.getByText('Copper, Paper, and Glass original percussion sets')).toBeVisible();
   await expect(page.getByText('Checkout and license activation are not available yet.', { exact: false })).toBeVisible();
   await expect(page.getByRole('button')).toHaveCount(0);
 });

@@ -60,10 +60,10 @@ Interface labels also audited: Track (1), Time (1), Seed (1), Score (1), Setting
 | Copy | Words | Result |
 | --- | ---: | --- |
 | One-time offer | 2 | Pass |
-| Get every percussion set and run change | 7 | Pass |
+| Get every percussion set | 4 | Pass |
 | The free game includes one complete run, one percussion set, and six run changes. | 14 | Pass |
 | $5 one time | 3 | Pass |
-| Pulse Run Complete adds three percussion sets and twelve run changes. | 11 | Pass |
+| Pulse Run Complete adds the Copper, Paper, and Glass percussion sets. | 11 | Pass |
 | It never adds ads. | 4 | Pass |
 | View Complete availability | 3 | Pass |
 | Checkout and license activation are not available yet. | 8 | Pass |

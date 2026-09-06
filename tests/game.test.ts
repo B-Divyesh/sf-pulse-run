@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { PulseGame, RUN_DURATION_MS, TRACK_COUNT } from '../src/game';
+import { grooveEvents } from '../src/audio';
+import { GROOVE_SETS, PulseGame, RUN_DURATION_MS, TRACK_COUNT } from '../src/game';
 
 describe('PulseGame deterministic simulation', () => {
   it('creates the same note chart for the same seed', () => {
@@ -65,5 +66,16 @@ describe('PulseGame deterministic simulation', () => {
     restored.start();
     restored.step(250);
     expect(restored.runTime).toBe(3_000);
+  });
+
+  it('ships four distinct percussion arrangements for the free and paid sets', () => {
+    const signatures = GROOVE_SETS.map((groove) => ({
+      id: groove.id,
+      signature: Array.from({ length: 16 }, (_, step) => grooveEvents(groove.id, step).join('+')).join('|'),
+    }));
+
+    expect(GROOVE_SETS.filter((groove) => groove.premium)).toHaveLength(3);
+    expect(new Set(signatures.map(({ signature }) => signature)).size).toBe(4);
+    expect(signatures.every(({ signature }) => signature.includes('kick') && signature.includes('snare') && signature.includes('hat'))).toBe(true);
   });
 });

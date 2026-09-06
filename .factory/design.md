@@ -40,6 +40,6 @@ The fixed-timestep simulation runs at 60 updates per second and renders through 
 
 ## Original asset provenance
 
-All game visuals are hand-authored Canvas 2D geometry and CSS in this repository. The favicon and social card are hand-authored SVG geometry derived from the four-lane game. Percussion is synthesized at runtime with Web Audio oscillators and generated noise after a user gesture. No recordings, external art, stock assets, generated images, copyrighted songs, or third-party fonts are used.
+All game visuals are hand-authored Canvas 2D geometry and CSS in this repository. The favicon and social card are hand-authored SVG geometry derived from the four-lane game. Circuit, Copper, Paper, and Glass use distinct 16-step percussion arrangements synthesized at runtime with Web Audio oscillators and generated noise after a user gesture. No recordings, external art, stock assets, generated images, copyrighted songs, or third-party fonts are used.
 
 Assets authored by Param Factory on 6 September 2026 under the repository MIT license.

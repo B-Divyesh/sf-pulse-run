@@ -1,7 +1,20 @@
+import { GROOVE_SETS, type GrooveId } from './game';
+
+export function grooveEvents(grooveId: GrooveId, step: number): string[] {
+  const groove = GROOVE_SETS.find((candidate) => candidate.id === grooveId) ?? GROOVE_SETS[0];
+  const position = ((step % 16) + 16) % 16;
+  return [
+    ...(groove.kick.includes(position as never) ? ['kick'] : []),
+    ...(groove.snare.includes(position as never) ? ['snare'] : []),
+    ...(groove.hat.includes(position as never) ? ['hat'] : []),
+  ];
+}
+
 export class PercussionAudio {
   private context: AudioContext | null = null;
   private output: GainNode | null = null;
-  private lastBeat = -1;
+  private lastStep = -1;
+  private grooveId: GrooveId = 'circuit';
   enabled = true;
 
   get isUnlocked(): boolean {
@@ -25,18 +38,25 @@ export class PercussionAudio {
     }
   }
 
+  setGroove(grooveId: GrooveId): void {
+    this.grooveId = grooveId;
+    this.resetBeat();
+  }
+
   resetBeat(): void {
-    this.lastBeat = -1;
+    this.lastStep = -1;
   }
 
   tick(trackTime: number, track: number): void {
     if (!this.context || !this.output || !this.enabled) return;
-    const beat = Math.floor(trackTime / 250);
-    if (beat === this.lastBeat) return;
-    this.lastBeat = beat;
-    if (beat % 4 === 0) this.kick(track);
-    if (beat % 4 === 2) this.snare(track);
-    if (beat % 2 === 1) this.hat(track);
+    const step = Math.floor(trackTime / 125);
+    if (step === this.lastStep) return;
+    this.lastStep = step;
+    const groove = GROOVE_SETS.find((candidate) => candidate.id === this.grooveId) ?? GROOVE_SETS[0];
+    const events = grooveEvents(this.grooveId, step);
+    if (events.includes('kick')) this.kick(track, groove.tone);
+    if (events.includes('snare')) this.snare(track, groove.tone);
+    if (events.includes('hat')) this.hat(track, groove.tone);
   }
 
   hit(lane: number, perfect: boolean): void {
@@ -52,12 +72,12 @@ export class PercussionAudio {
     oscillator.stop(this.context.currentTime + 0.08);
   }
 
-  private kick(track: number): void {
+  private kick(track: number, tone: number): void {
     if (!this.context || !this.output) return;
     const oscillator = this.context.createOscillator();
     const gain = this.context.createGain();
     oscillator.type = track % 2 ? 'triangle' : 'sine';
-    oscillator.frequency.setValueAtTime(120, this.context.currentTime);
+    oscillator.frequency.setValueAtTime(Math.max(70, 120 + tone * 0.08), this.context.currentTime);
     oscillator.frequency.exponentialRampToValueAtTime(44, this.context.currentTime + 0.12);
     gain.gain.setValueAtTime(0.32, this.context.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, this.context.currentTime + 0.16);
@@ -66,7 +86,7 @@ export class PercussionAudio {
     oscillator.stop(this.context.currentTime + 0.17);
   }
 
-  private snare(track: number): void {
+  private snare(track: number, tone: number): void {
     if (!this.context || !this.output) return;
     const buffer = this.context.createBuffer(1, this.context.sampleRate * 0.09, this.context.sampleRate);
     const data = buffer.getChannelData(0);
@@ -79,18 +99,18 @@ export class PercussionAudio {
     const gain = this.context.createGain();
     source.buffer = buffer;
     filter.type = 'bandpass';
-    filter.frequency.value = 1_000 + track * 110;
+    filter.frequency.value = 1_000 + track * 110 + tone;
     gain.gain.value = 0.1;
     source.connect(filter).connect(gain).connect(this.output);
     source.start();
   }
 
-  private hat(track: number): void {
+  private hat(track: number, tone: number): void {
     if (!this.context || !this.output) return;
     const oscillator = this.context.createOscillator();
     const gain = this.context.createGain();
     oscillator.type = 'square';
-    oscillator.frequency.value = 2_900 + track * 120;
+    oscillator.frequency.value = 2_900 + track * 120 + tone;
     gain.gain.setValueAtTime(0.025, this.context.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, this.context.currentTime + 0.025);
     oscillator.connect(gain).connect(this.output);

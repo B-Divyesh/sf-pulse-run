@@ -222,12 +222,12 @@ class PulseRunApp {
           <div class="price-grid">
             <div>
               <p class="eyebrow">One-time offer</p>
-              <h2 id="price-title">Get every percussion set and run change</h2>
+              <h2 id="price-title">Get every percussion set</h2>
               <p class="lead">The free game includes one complete run, one percussion set, and six run changes.</p>
             </div>
             <div class="price-panel">
               <p class="price"><strong>$5</strong><span>one time</span></p>
-              <p class="price-copy">Pulse Run Complete adds three percussion sets and twelve run changes. It never adds ads.</p>
+              <p class="price-copy">Pulse Run Complete adds the Copper, Paper, and Glass percussion sets. It never adds ads.</p>
               <a class="button-link secondary" href="/license" data-route>View Complete availability</a>
               <span class="availability">Checkout and license activation are not available yet.</span>
             </div>
@@ -283,7 +283,7 @@ class PulseRunApp {
         <h2>Free game</h2>
         <p>You may play the free game for personal use. It includes a complete three-minute run, one percussion set, and six run changes.</p>
         <h2>Pulse Run Complete</h2>
-        <p>Pulse Run Complete costs $5 USD once. It adds three percussion sets and twelve run changes. It is not a subscription.</p>
+        <p>Pulse Run Complete costs $5 USD once. It adds the Copper, Paper, and Glass percussion sets. It is not a subscription.</p>
         <p>Checkout and license activation are not available yet. No purchase can be completed until the Sociobot billing offer is registered.</p>
         <h2>Fair use and availability</h2>
         <p>Do not attempt to disrupt the site or distribute its paid content. The game is provided without a promise of uninterrupted availability.</p>
@@ -300,8 +300,7 @@ class PulseRunApp {
         <p>Pulse Run Complete costs $5 USD once. It is not a subscription.</p>
         <h2>Included after activation</h2>
         <ul>
-          <li>Three additional original percussion sets</li>
-          <li>Twelve additional run changes</li>
+          <li>Copper, Paper, and Glass original percussion sets</li>
           <li>The same local-only scores and settings</li>
         </ul>
         <h2>Current availability</h2>

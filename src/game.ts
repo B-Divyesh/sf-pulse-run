@@ -31,27 +31,14 @@ export const FREE_MODIFIERS: Modifier[] = [
   { id: 'steady', name: 'Steady count', description: 'Keeps each phrase to four clear beats.' },
 ];
 
-export const PREMIUM_MODIFIERS: Modifier[] = [
-  { id: 'triplet', name: 'Triplet steps', description: 'Adds three-note turns.', premium: true },
-  { id: 'cross', name: 'Cross pattern', description: 'Alternates outer and inner lanes.', premium: true },
-  { id: 'hold', name: 'Held beat', description: 'Adds longer scoring notes.', premium: true },
-  { id: 'reverse', name: 'Reverse count', description: 'Reverses each second phrase.', premium: true },
-  { id: 'syncopate', name: 'Late accent', description: 'Moves accents off the main beat.', premium: true },
-  { id: 'streak', name: 'Streak bank', description: 'Protects part of a broken streak.', premium: true },
-  { id: 'swing', name: 'Swing step', description: 'Offsets alternating notes.', premium: true },
-  { id: 'split', name: 'Split beat', description: 'Adds paired lane hits.', premium: true },
-  { id: 'quiet', name: 'Quiet count', description: 'Hides one guide beat per phrase.', premium: true },
-  { id: 'rush', name: 'Short rush', description: 'Speeds up the last phrase.', premium: true },
-  { id: 'echo', name: 'Echo lane', description: 'Repeats the previous lane.', premium: true },
-  { id: 'bank', name: 'Perfect bank', description: 'Saves perfect hits for a track bonus.', premium: true },
-];
-
 export const GROOVE_SETS = [
-  { id: 'circuit', name: 'Circuit set', premium: false },
-  { id: 'copper', name: 'Copper set', premium: true },
-  { id: 'paper', name: 'Paper set', premium: true },
-  { id: 'glass', name: 'Glass set', premium: true },
+  { id: 'circuit', name: 'Circuit', premium: false, kick: [0, 8], snare: [4, 12], hat: [2, 6, 10, 14], tone: 0 },
+  { id: 'copper', name: 'Copper', premium: true, kick: [0, 6, 10], snare: [4, 12], hat: [2, 5, 8, 11, 14], tone: -110 },
+  { id: 'paper', name: 'Paper', premium: true, kick: [0, 7, 11], snare: [3, 8, 12], hat: [1, 5, 9, 13, 15], tone: 190 },
+  { id: 'glass', name: 'Glass', premium: true, kick: [0, 5, 8, 13], snare: [4, 11], hat: [2, 6, 7, 10, 14, 15], tone: 360 },
 ] as const;
+
+export type GrooveId = typeof GROOVE_SETS[number]['id'];
 
 export interface GameSnapshot {
   version: 1;
