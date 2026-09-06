@@ -153,10 +153,29 @@ for (const route of ['/', '/demo', '/privacy', '/terms', '/license']) {
   });
 }
 
-test('the designed 404 document has recovery structure', async ({ page }) => {
+test('the designed 404 document keeps its recovery styling under the production CSP', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.route('**/404.html', async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({
+      response,
+      headers: {
+        ...response.headers(),
+        'content-security-policy': "default-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'",
+      },
+    });
+  });
   await page.goto('/404.html');
   await expect(page).toHaveTitle('Page not found — Pulse Run');
-  await expect(page.locator('h1')).toHaveText('This page is not part of the run');
+  await expect(page.locator('h1')).toHaveText('Page not found');
   await expect(page.locator('main')).toHaveCount(1);
   await expect(page.getByRole('link', { name: 'Return to the game' })).toHaveAttribute('href', '/');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(16, 23, 34)');
+  await expect(page.getByRole('link', { name: 'Return to the game' })).toHaveCSS('background-color', 'rgb(102, 227, 224)');
+  const results = await new AxeBuilder({ page }).analyze();
+  const severe = results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''));
+  expect(severe).toEqual([]);
+  expect(errors).toEqual([]);
 });
