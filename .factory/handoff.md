@@ -8,26 +8,26 @@ Artifact class: `browser-game`
 
 ## Status
 
-Strict review 1 passed with **zero findings** and **zero untested claims**. No product code was changed.
+Strict review 2 passed with **zero findings** and **zero untested claims**. No product code was changed.
 
 - Implementation and deployed artifact: `aba0b954a3111835dd9a8a87af1b5f104035ae5c`.
-- Documentation baseline reviewed: `6a776bd7eee66c3d495389faa054f8724a6c39e8`.
-- The later commit containing this handoff and `.factory/review-1.md` is report-only.
-- Live JavaScript, main CSS, 404 HTML, and 404 CSS hashes match the clean implementation build.
+- Documentation baseline reviewed: `79e335927b7a4114ec3f526fd3903fb06fa0c738`.
+- Commits after the implementation candidate change reports and the copy audit only.
+- Live JavaScript, CSS, 404 HTML, and 404 CSS hashes match the clean candidate build.
 
 ## What was reviewed
 
 - Fresh desktop and 390 × 664 phone first screens name the three-minute rhythm run, audience, and sample action, and show the game.
-- One-click sample entry displays a persistent label, active seeded play, and the prior score 18,420.
-- A real timed live sample reaches the third-miss loss screen at 0:06. Reset restores track 1/6 and score 0 without changing seeded real storage.
-- The clean deterministic suite reaches the six-track 3:00 win, verifies five choices, and resets through Play again.
-- Keyboard, touch, all four remapped keys, duplicate-key recovery, wider timing, settings persistence, reload recovery, focus, reduced motion, 200% text, and phone targets passed.
-- Routes, internal links, distinct titles, semantic structure, privacy deletion, same-origin traffic, security headers, legal pages, offer metadata, and the styled deliberate 404 passed.
-- All earlier findings are resolved. Their current evidence is listed in `.factory/review-1.md`.
+- One-click sample entry displays a persistent label, active play, and prior score 18,420 without changing real storage.
+- A wall-clock live sample reaches the third-miss loss screen at 0:06.
+- A fresh live client completed all six deployed tracks, selected five change buttons, and reached the 3:00 win screen. The live origin exposes no local QA hook; the run used normal keyboard events and the production fixed-timestep loop.
+- Keyboard and touch scoring, Play again, Reset demo, invalid duplicate keys, focus, settings, real-run reload recovery, reduced motion, 200% text, and phone targets passed.
+- Routes, internal links, titles, semantics, privacy deletion, same-origin traffic, security headers, legal pages, public offer metadata, and the styled deliberate 404 passed.
+- Every earlier finding is resolved. Its fresh disposition appears in `.factory/review-2.md`.
 
 ## Clean verification
 
-From a detached checkout of `aba0b95`:
+From a fresh detached clone of `aba0b95`:
 
 ```sh
 npm ci
@@ -40,19 +40,21 @@ Results:
 - 6 Vitest simulation tests passed.
 - 33 Playwright browser tests passed.
 - All 16 commands declared in `.factory/claims.json` passed separately.
-- The claim registry has exactly one tagged browser test for each ID.
-- `dist/` was produced; application JavaScript is 36,568 bytes and CSS is 12,236 bytes.
+- Each claim ID has exactly one tagged browser test.
+- `dist/` was produced. Application JavaScript is 36,568 bytes and CSS is 12,236 bytes.
 
 ## Live verification
 
 - Desktop shows 395.79 px of game canvas in the first viewport. Phone shows 148.86 px with zero overflow.
-- Live routes have one h1, one main, correct titles, and no application console errors.
-- Live axe scans have zero serious or critical findings on all application routes and the 404 recovery page.
+- The live loss and win end screens, both restart paths, and five between-track choices were recorded.
+- Live routes have one h1, one main landmark, correct titles, and no application console errors.
+- Live axe scans have zero serious or critical findings on every application route and the 404 page.
 - `verify-url.sh` passed.
-- Mobile Lighthouse: Performance 100, Accessibility 96, Best Practices 100, SEO 100; LCP 997.5 ms, CLS 0, TBT 0 ms.
-- The expected unknown URL returns HTTP 404 with a working styled recovery page. Its generic failed-resource console line is expected for that deliberate status.
+- Live frame measurement was 60.00 fps at 390 × 844 under 4× CPU throttling.
+- Mobile Lighthouse: Performance 100, Accessibility 96, Best Practices 100, SEO 100; LCP 957.9 ms, CLS 0, TBT 20 ms.
+- The expected unknown URL returns HTTP 404 with a working styled recovery page.
 
-Evidence is in `/work/.evidence/pulse-run-review-1/`. The formal report is `.factory/review-1.md`.
+Evidence is in `/work/.evidence/pulse-run-review-2/`. The formal report is `.factory/review-2.md`.
 
 ## Offer and remaining dependency
 
@@ -71,4 +73,4 @@ npm test
 npm run build
 ```
 
-Then run each command in `.factory/claims.json` and review <https://pulse-run.sociobot.in> in fresh desktop and phone contexts.
+Then run every command in `.factory/claims.json` and review <https://pulse-run.sociobot.in> in fresh desktop and phone contexts.
