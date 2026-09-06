@@ -8,31 +8,26 @@ Artifact class: `browser-game`
 
 ## Status
 
-Repair 3 is complete. The current implementation has no open product defect from either independent verification report.
+Strict review 1 passed with **zero findings** and **zero untested claims**. No product code was changed.
 
-The unknown-route page now loads a same-origin stylesheet allowed by the deployed content security policy. Its heading is the plain **Page not found**, and it keeps the Pulse Run visual system, recovery link, standard navigation, legal links, and 44 px targets on desktop and phone.
+- Implementation and deployed artifact: `aba0b954a3111835dd9a8a87af1b5f104035ae5c`.
+- Documentation baseline reviewed: `6a776bd7eee66c3d495389faa054f8724a6c39e8`.
+- The later commit containing this handoff and `.factory/review-1.md` is report-only.
+- Live JavaScript, main CSS, 404 HTML, and 404 CSS hashes match the clean implementation build.
 
-## Version record
+## What was reviewed
 
-- Implementation and deployed artifact: `aba0b954a3111835dd9a8a87af1b5f104035ae5c` (`fix styled 404 under content security policy`).
-- Documentation/report commit: the later report-only commit containing this handoff and copy-audit update.
-- Previous documentation baseline: `4b7339f645b8bcbffca5921990dbeb93f45bbd68`.
-- Live JavaScript, main CSS, 404 HTML, and 404 CSS SHA-256 values match the clean build from the implementation commit.
-
-## Repair
-
-- Moved the 404 design from an inline `<style>` block to `/404.css`.
-- Kept `style-src 'self'`; no CSP weakening or inline-style exception was added.
-- Replaced the metaphorical 404 heading with **Page not found**.
-- Added the standard sample, privacy, terms, product description, and version recovery structure.
-- Replaced the structure-only 404 test with a browser outcome test. It applies the production CSP, checks computed product colors, confirms the recovery target, runs axe, and rejects console errors.
-- Added the new 404 copy to `.factory/copy-audit.md`. Every listed sentence remains within the 22-word limit and uses none of the banned marketing words.
-
-No game logic, free content, paid deliverable, price, storage boundary, or product scope changed.
+- Fresh desktop and 390 × 664 phone first screens name the three-minute rhythm run, audience, and sample action, and show the game.
+- One-click sample entry displays a persistent label, active seeded play, and the prior score 18,420.
+- A real timed live sample reaches the third-miss loss screen at 0:06. Reset restores track 1/6 and score 0 without changing seeded real storage.
+- The clean deterministic suite reaches the six-track 3:00 win, verifies five choices, and resets through Play again.
+- Keyboard, touch, all four remapped keys, duplicate-key recovery, wider timing, settings persistence, reload recovery, focus, reduced motion, 200% text, and phone targets passed.
+- Routes, internal links, distinct titles, semantic structure, privacy deletion, same-origin traffic, security headers, legal pages, offer metadata, and the styled deliberate 404 passed.
+- All earlier findings are resolved. Their current evidence is listed in `.factory/review-1.md`.
 
 ## Clean verification
 
-Fresh clone: `/tmp/pulse-run-repair-3-clean.At7K9N`
+From a detached checkout of `aba0b95`:
 
 ```sh
 npm ci
@@ -42,68 +37,38 @@ npm run build
 
 Results:
 
-- `npm ci`: 61 packages installed, 0 vulnerabilities.
-- Vitest: all 6 deterministic simulation tests passed.
-- Playwright: all 33 browser tests passed.
-- All 16 commands in `.factory/claims.json` passed separately from the clean clone.
-- The registry has 16 IDs and every ID appears in exactly one tagged browser test.
-- Build output includes `dist/`; JavaScript is 36,568 bytes and main CSS is 12,236 bytes.
-- The 404 document is 1,244 bytes and its stylesheet is 2,513 bytes.
-
-The browser suite covers a deterministic 3:00 win, exact third-miss loss, restart reset, refresh recovery, all six run changes, keyboard, touch, all remapped lanes, settings, wider timing, local storage, sample isolation, price metadata, privacy deletion, reduced motion, focus, mobile layout, 200% text, frame rate, route structure, axe, and the production-CSP 404 outcome.
+- 6 Vitest simulation tests passed.
+- 33 Playwright browser tests passed.
+- All 16 commands declared in `.factory/claims.json` passed separately.
+- The claim registry has exactly one tagged browser test for each ID.
+- `dist/` was produced; application JavaScript is 36,568 bytes and CSS is 12,236 bytes.
 
 ## Live verification
 
-The clean `dist/` was deployed to the existing `sf-pulse-run` Static Web App in Central US. The existing custom domain and production environment were reused.
+- Desktop shows 395.79 px of game canvas in the first viewport. Phone shows 148.86 px with zero overflow.
+- Live routes have one h1, one main, correct titles, and no application console errors.
+- Live axe scans have zero serious or critical findings on all application routes and the 404 recovery page.
+- `verify-url.sh` passed.
+- Mobile Lighthouse: Performance 100, Accessibility 96, Best Practices 100, SEO 100; LCP 997.5 ms, CLS 0, TBT 0 ms.
+- The expected unknown URL returns HTTP 404 with a working styled recovery page. Its generic failed-resource console line is expected for that deliberate status.
 
-- Fresh desktop and 390 × 664 phone contexts state the job, audience, and first action before scrolling.
-- The desktop canvas starts at 406.95 px. The phone canvas starts at 515.14 px and shows 148.86 px in the first viewport.
-- One click opens `/demo`, shows the persistent sample label and previous score of 18,420, and starts active play.
-- A real timed no-input sample reaches **Run ended** after three missed phrases at 0:06.
-- **Reset demo** restores active track `1 / 6`, score `0`, and empty real local storage.
-- All observed landing and sample requests were same-origin.
-- The unknown path returns the deliberate HTTP 404. `/404.css` returns 200, computed colors match the product palette, and desktop/phone recovery views have no overflow.
-- The unknown request produces only Chromium's generic message for its deliberate 404 status. There is no CSP violation or other unexpected console error. Direct `/404.html` returns 200 with zero console errors.
-- Live axe checks on the landing and 404 pages found zero serious or critical violations.
-- `verify-url.sh` passed: correct title and language, one h1, main landmark, no missing image alt text, no unlabeled buttons, and no landing console errors.
-- `/`, `/demo`, `/privacy`, `/terms`, `/license`, metadata, crawler files, icons, social art, and the direct 404 document return 200.
-- The live privacy control deleted all product storage in its fresh browser context.
-- Lighthouse mobile: Performance 100, Accessibility 96, Best Practices 100, SEO 100; LCP 1.08 s, CLS 0, TBT 31.5 ms.
-
-Evidence is in `/work/.evidence/pulse-run-repair-3/`. It includes clean command logs, each claim log, headers, hashes, browser JSON, Lighthouse JSON, verify-url output, and desktop/phone/sample/end-screen/404 screenshots.
-
-## Earlier findings
-
-| Finding | Current disposition |
-| --- | --- |
-| Sample banner contrast | Resolved; current browser axe checks pass and the label remains visible. |
-| Mobile targets, 200% text, and overflow | Resolved; the clean suite passes and live phone overflow is zero. |
-| Paid percussion catalog completeness | Resolved; Complete still contains Copper, Paper, and Glass for $5 USD once. |
-| Real-run refresh recovery | Resolved; the clean browser suite restores the paused run. |
-| Game missing from the 390 × 664 first screen | Resolved; 148.86 px of live canvas is visible. |
-| False run-change wording and ineffective Steady count | Resolved; all six effects have separate observable outcomes in the claim test. |
-| Seven unregistered public promises | Resolved; all 16 current public claims have one matching test and command. |
-| Inline 404 CSS blocked by CSP | Resolved at the cause; the deployed same-origin stylesheet loads and no CSP error remains. |
+Evidence is in `/work/.evidence/pulse-run-review-1/`. The formal report is `.factory/review-1.md`.
 
 ## Offer and remaining dependency
 
-Pulse Run Complete remains a **$5 USD one-time offer**, not a subscription. It adds the Copper, Paper, and Glass original percussion sets. The complete free run remains available with Circuit and six run changes.
+Pulse Run Complete costs **$5 USD once** and is not a subscription. It adds Copper, Paper, and Glass. The free Circuit run and all six free run changes remain available.
 
-Public offer metadata is mirrored to `/work/.evidence/billing-offer.json`. The 98-character verb-first catalog description is mirrored to `/work/.evidence/catalog-description.txt`.
+The billing operator still needs to register `pulse-run-complete` and provide entitlement validation. Checkout and activation remain visibly unavailable and were not tested or claimed as working.
 
-The separate billing operator still needs to register `pulse-run-complete` and provide the entitlement-validation contract. Checkout and activation remain unavailable and are stated that way on `/license`. No checkout, payment, or entitlement was attempted or claimed as working.
+Offline play, multiplayer, uploads, user charts, competitive ranking, and a backend are not advertised. No backend, database, shared service, credential, or unrelated product was accessed.
 
-Offline play, multiplayer, uploads, user charts, and competitive ranking are not advertised modes. No backend, database, shared service, user credential, or unrelated product was accessed for this repair.
+## Reproduce
 
-## Verification 3: PASS
+```sh
+git checkout aba0b954a3111835dd9a8a87af1b5f104035ae5c
+npm ci
+npm test
+npm run build
+```
 
-Independent verification on 6 September 2026 reviewed implementation `aba0b954a3111835dd9a8a87af1b5f104035ae5c`; the preceding report-only documentation baseline was `f5f0a53f748d0a66c1f01c4970c0a74ebc67fcd3`.
-
-- Fresh detached checkout: `npm ci`, `npm test` (6 unit and 33 browser tests), and `npm run build` passed.
-- Every one of the 16 declared claim commands passed individually. The registry has exactly one matching tagged test per claim.
-- Fresh live desktop and 390 × 664 phone pages name the play, audience, and first action before scrolling, and show the game canvas. The phone has 148.86 px of visible canvas and zero overflow.
-- Live sample entry is one click, keeps its Demo label and realistic 18,420 score, reaches a recorded third-miss loss end screen, and resets without changing seeded real storage.
-- Live routes, internal links, titles, accessibility checks, privacy/storage boundary, CSP-compatible styled 404, and `verify-url.sh` passed. The deliberate unknown-route HTTP 404 is expected; it has no CSP error.
-- Fresh mobile Lighthouse: Performance 100, Accessibility 96, Best Practices 100, SEO 100; LCP 966.732 ms, CLS 0, TBT 26 ms.
-
-There are zero verification findings and zero untested claims. Evidence and the full report are in `.factory/verification-3.md` and `/work/.evidence/pulse-run-verify-3/`.
+Then run each command in `.factory/claims.json` and review <https://pulse-run.sociobot.in> in fresh desktop and phone contexts.
