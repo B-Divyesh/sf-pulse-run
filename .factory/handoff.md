@@ -8,22 +8,21 @@ Artifact class: `browser-game`
 
 ## Status
 
-Strict review 2 passed with **zero findings** and **zero untested claims**. No product code was changed.
+Verification 4 is **FAIL** with **1 serious finding** and **0 untested claims**. No product code was changed.
 
 - Implementation and deployed artifact: `aba0b954a3111835dd9a8a87af1b5f104035ae5c`.
-- Documentation baseline reviewed: `79e335927b7a4114ec3f526fd3903fb06fa0c738`.
-- Commits after the implementation candidate change reports and the copy audit only.
-- Live JavaScript, CSS, 404 HTML, and 404 CSS hashes match the clean candidate build.
+- Documentation baseline reviewed: `de3835f22e349ecfcf9afeffb15598306af72122`.
+- The live JavaScript, CSS, 404 HTML, and 404 CSS hashes match the clean candidate build.
+- At the phone breakpoint, the focusable header wordmark link has no accessible name. It is a serious axe `link-name` finding on every application route and must be repaired before a PASS.
 
 ## What was reviewed
 
-- Fresh desktop and 390 × 664 phone first screens name the three-minute rhythm run, audience, and sample action, and show the game.
-- One-click sample entry displays a persistent label, active play, and prior score 18,420 without changing real storage.
-- A wall-clock live sample reaches the third-miss loss screen at 0:06.
-- A fresh live client completed all six deployed tracks, selected five change buttons, and reached the 3:00 win screen. The live origin exposes no local QA hook; the run used normal keyboard events and the production fixed-timestep loop.
-- Keyboard and touch scoring, Play again, Reset demo, invalid duplicate keys, focus, settings, real-run reload recovery, reduced motion, 200% text, and phone targets passed.
-- Routes, internal links, titles, semantics, privacy deletion, same-origin traffic, security headers, legal pages, public offer metadata, and the styled deliberate 404 passed.
-- Every earlier finding is resolved. Its fresh disposition appears in `.factory/review-2.md`.
+- Fresh desktop and 390 × 844 phone first screens in Chromium 145, Firefox 146, and WebKit 26 name the three-minute rhythm run, audience, and sample action, and show the game.
+- One-click sample entry shows its persistent label, active play, and prior score 18,420 without changing real storage. Reset returns the sample to track 1 / 6.
+- Chromium, Firefox, and WebKit each completed all six deployed tracks, chose five real changes, and reached the visible 3:00 win screen. Runs used normal keyboard and touch input; no live QA hook was used.
+- Each live real run reloaded into the paused recovery screen and resumed. Gesture-gated audio-context creation and touch-control scoring were observed in every engine.
+- Routes, internal links, titles, privacy deletion, same-origin traffic, security headers, legal pages, public offer metadata, and the styled deliberate 404 passed.
+- Every earlier product finding remains resolved. The new mobile unnamed-wordmark finding and browser-specific evidence are in `.factory/verification-4.md`.
 
 ## Clean verification
 
@@ -38,23 +37,20 @@ npm run build
 Results:
 
 - 6 Vitest simulation tests passed.
-- 33 Playwright browser tests passed.
+- 33 Playwright Chromium tests passed.
 - All 16 commands declared in `.factory/claims.json` passed separately.
 - Each claim ID has exactly one tagged browser test.
 - `dist/` was produced. Application JavaScript is 36,568 bytes and CSS is 12,236 bytes.
 
 ## Live verification
 
-- Desktop shows 395.79 px of game canvas in the first viewport. Phone shows 148.86 px with zero overflow.
-- The live loss and win end screens, both restart paths, and five between-track choices were recorded.
-- Live routes have one h1, one main landmark, correct titles, and no application console errors.
-- Live axe scans have zero serious or critical findings on every application route and the 404 page.
-- `verify-url.sh` passed.
-- Live frame measurement was 60.00 fps at 390 × 844 under 4× CPU throttling.
-- Mobile Lighthouse: Performance 100, Accessibility 96, Best Practices 100, SEO 100; LCP 957.9 ms, CLS 0, TBT 20 ms.
+- `verify-url.sh` passed for the landing page.
+- Chromium 145.0.7632.6, Firefox 146.0.1, and WebKit 26.0 each loaded fresh desktop and phone viewports, had zero phone overflow, completed a live 3:00 run with five choices, and showed no normal-play console errors.
+- Phone touch controls scored 844 in Chromium, 390 in Firefox, and 350 in WebKit. Each client created audio only after an explicit start gesture and recovered a real run after reload.
+- Desktop axe has zero serious or critical issues. Phone axe has the one serious unnamed home-link issue on every application route.
 - The expected unknown URL returns HTTP 404 with a working styled recovery page.
 
-Evidence is in `/work/.evidence/pulse-run-review-2/`. The formal report is `.factory/review-2.md`.
+Evidence is in `/work/.evidence/pulse-run-verify-4/`. The formal report is `.factory/verification-4.md`.
 
 ## Offer and remaining dependency
 
@@ -62,7 +58,7 @@ Pulse Run Complete costs **$5 USD once** and is not a subscription. It adds Copp
 
 The billing operator still needs to register `pulse-run-complete` and provide entitlement validation. Checkout and activation remain visibly unavailable and were not tested or claimed as working.
 
-Offline play, multiplayer, uploads, user charts, competitive ranking, and a backend are not advertised. No backend, database, shared service, credential, or unrelated product was accessed.
+Offline play, multiplayer, uploads, user charts, competitive ranking, and a backend are not advertised. The README only documents Chromium Playwright support; Firefox and WebKit coverage is observed compatibility evidence, not an added public support claim. No backend, database, shared service, credential, or unrelated product was accessed.
 
 ## Reproduce
 
@@ -73,4 +69,4 @@ npm test
 npm run build
 ```
 
-Then run every command in `.factory/claims.json` and review <https://pulse-run.sociobot.in> in fresh desktop and phone contexts.
+Then run every command in `.factory/claims.json`, repair the responsive wordmark accessible name, and re-run phone axe across every application route before declaring PASS.
