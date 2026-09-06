@@ -64,6 +64,12 @@ button,
   transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
 }
 
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 button:hover,
 .button-link:hover {
   transform: translate(-1px, -1px);
@@ -130,6 +136,8 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  min-width: 44px;
+  min-height: 44px;
   color: var(--ink);
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -295,7 +303,7 @@ h3 {
 }
 
 .demo-banner button {
-  min-height: 40px;
+  min-height: 44px;
   border-color: var(--night-deep);
   background: var(--night-deep);
   color: var(--ink);
@@ -629,6 +637,19 @@ canvas {
   gap: 18px;
 }
 
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.legal-page a:not(.button-link) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
 .route-announcement,
 .visually-hidden {
   position: absolute !important;
@@ -717,7 +738,8 @@ dialog h2 {
     min-height: 64px;
   }
 
-  .site-nav li:nth-child(3) {
+  .site-nav li:nth-child(3),
+  .site-nav li:nth-child(4) {
     display: none;
   }
 

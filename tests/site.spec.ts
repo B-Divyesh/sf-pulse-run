@@ -120,6 +120,22 @@ test('phone layout has no horizontal overflow and shows the game in the first vi
   }
 });
 
+test('visible touch targets meet 44px and text remains usable at 200 percent', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const targets = await page.locator('a:visible, button:visible, select:visible').all();
+  for (const target of targets) {
+    const box = await target.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+  }
+
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
+  await expect(page.getByRole('heading', { name: 'Play a three-minute rhythm run' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Try it with sample data' })).toBeVisible();
+});
+
 test('reduced-motion preference removes interface transition duration', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
