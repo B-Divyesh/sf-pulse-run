@@ -32,7 +32,6 @@ test('one click opens an active, populated, persistent sample', async ({ page })
 test('an in-progress real run recovers paused after reload', async ({ page }) => {
   await page.goto('/demo?qa=1');
   await page.getByRole('button', { name: 'Start for real' }).click();
-  await page.waitForTimeout(1_200);
   await page.reload();
 
   await expect(page.getByRole('heading', { name: 'Run paused' })).toBeVisible();

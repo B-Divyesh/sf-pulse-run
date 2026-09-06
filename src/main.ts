@@ -433,6 +433,7 @@ class PulseRunApp {
       void this.audio.unlock();
       this.createGame('real');
       this.game?.start();
+      this.saveRun();
       if (this.route !== '/') this.navigate('/'); else this.syncGameDom();
     }));
 
