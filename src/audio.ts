@@ -21,6 +21,10 @@ export class PercussionAudio {
     return this.context !== null;
   }
 
+  get currentGroove(): GrooveId {
+    return this.grooveId;
+  }
+
   async unlock(): Promise<void> {
     if (!this.context) {
       this.context = new AudioContext();

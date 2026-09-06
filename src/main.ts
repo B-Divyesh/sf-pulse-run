@@ -26,9 +26,20 @@ interface Stats {
 interface QaApi {
   finishRun: () => void;
   loseRun: () => void;
-  placeNote: (lane: number) => void;
+  placeNote: (lane: number, offset?: number) => void;
+  inspectModifier: (id: string) => {
+    id: string;
+    timingWindow: number;
+    multiplier: number;
+    shield: number;
+    noteCount: number;
+    rotatedInputWorks: boolean;
+    lanePattern: number[];
+    groove: string;
+  } | null;
   snapshot: () => GameSnapshot | null;
   fps: () => number;
+  audioUnlocked: () => boolean;
 }
 
 declare global {
@@ -110,7 +121,7 @@ class PulseRunApp {
       <footer class="site-footer">
         <div>
           <p>Pulse Run is a three-minute single-player rhythm game.</p>
-          <p>Original procedural visuals and percussion by Param Factory.</p>
+          <p>Procedural visuals and synthesized percussion by Param Factory.</p>
         </div>
         <div class="footer-links">
           <a href="/privacy" data-route>Privacy</a>
@@ -174,7 +185,7 @@ class PulseRunApp {
           <div class="hero-copy">
             <p class="eyebrow">Single-player browser game</p>
             <h1>Play a three-minute rhythm run</h1>
-            <p class="lead">For keyboard players who want a short run with original percussion and no account setup.</p>
+            <p class="lead">For keyboard players who want a short run with synthesized percussion and no account setup.</p>
             <div class="actions">
               <button type="button" data-start-demo>Try it with sample data</button>
               <button class="secondary" type="button" data-start-real>Start a real run</button>
@@ -192,7 +203,7 @@ class PulseRunApp {
           <div class="section-heading">
             <p class="eyebrow">How it works</p>
             <h2 id="how-title">Finish six 30-second tracks</h2>
-            <p class="lead">Each choice changes the next note pattern, timing window, or score.</p>
+            <p class="lead">Each change affects patterns, timing, scoring, controls, or missed-phrase protection.</p>
           </div>
           <ol class="steps">
             <li><h3>Match the notes</h3><p>Press D, F, J, and K when notes reach the line. You can remap every key.</p></li>
@@ -331,7 +342,7 @@ class PulseRunApp {
     let body: string;
     switch (this.route) {
       case '/':
-        this.setMetadata('Pulse Run — Play a three-minute rhythm run', 'Play a three-minute keyboard rhythm run with original percussion and choices that change each track.');
+        this.setMetadata('Pulse Run — Play a three-minute rhythm run', 'Play a three-minute keyboard rhythm run with synthesized percussion and choices that change each track.');
         body = this.homePage();
         break;
       case '/demo':
@@ -819,17 +830,47 @@ class PulseRunApp {
         this.lastStatus = '';
         this.syncGameDom();
       },
-      placeNote: (lane: number) => {
+      placeNote: (lane: number, offset = 0) => {
         if (!this.game) return;
         if (this.game.status === 'ready' || this.game.status === 'paused') this.game.start();
         const note = this.game.notes.find((candidate) => !candidate.resolved);
         if (!note) return;
         note.lane = lane;
-        note.at = this.game.trackTime;
+        note.at = this.game.trackTime + offset;
         this.syncGameDom();
       },
       snapshot: () => this.game?.toSnapshot() ?? null,
       fps: () => this.measuredFps(),
+      audioUnlocked: () => this.audio.isUnlocked,
+      inspectModifier: (id) => {
+        if (!FREE_MODIFIERS.some((modifier) => modifier.id === id)) return null;
+        const game = new PulseGame(`qa-${id}`);
+        game.status = 'choice';
+        game.choices = [id];
+        game.choose(id);
+        let rotatedInputWorks = false;
+        if (id === 'rotate') {
+          const note = game.notes[0];
+          note.lane = 0;
+          note.at = game.trackTime;
+          const wrongLaneMisses = game.hitLane(0) === null;
+          const shiftedLaneHits = game.hitLane(3) !== null;
+          rotatedInputWorks = wrongLaneMisses && shiftedLaneHits;
+        }
+        this.game = game;
+        this.mode = 'demo';
+        this.syncGameDom();
+        return {
+          id,
+          timingWindow: game.timingWindow,
+          multiplier: game.multiplier,
+          shield: game.shield,
+          noteCount: game.notes.length,
+          rotatedInputWorks,
+          lanePattern: game.notes.slice(0, 8).map((note) => note.lane),
+          groove: this.audio.currentGroove,
+        };
+      },
     };
   }
 

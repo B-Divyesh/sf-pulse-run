@@ -760,7 +760,7 @@ dialog h2 {
   }
 
   .hero {
-    padding-top: 32px;
+    padding-top: 20px;
   }
 
   .actions > button,
@@ -769,9 +769,7 @@ dialog h2 {
     min-width: 0;
   }
 
-  .hero {
-    gap: 22px;
-  }
+  .hero { gap: 16px; }
 
   .hero h1 {
     font-size: clamp(2.2rem, 11vw, 2.8rem);
@@ -782,12 +780,26 @@ dialog h2 {
   }
 
   .hero .actions {
-    margin-block: 20px 16px;
+    margin-block: 16px 12px;
+  }
+
+  .hero .action-note {
+    display: none;
   }
 
   .hero .facts {
     gap: 4px;
-    margin-top: 16px;
+    margin-top: 12px;
+    font-size: 0.86rem;
+    line-height: 1.32;
+  }
+
+  .hero .facts li { gap: 6px; }
+
+  .hero h1 {
+    max-width: none;
+    font-size: 2.1rem;
+    line-height: 1.08;
   }
 
   .demo-heading,
@@ -803,17 +815,32 @@ dialog h2 {
   }
 
   .game-topbar {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+    gap: 4px;
+    padding: 8px;
   }
 
   .game-topbar .metric:nth-child(3) {
     display: none;
   }
 
+  .game-topbar .metric span {
+    font-size: 0.62rem;
+  }
+
+  .game-topbar .metric strong {
+    font-size: 0.88rem;
+  }
+
+  .game-topbar .icon-button {
+    padding-inline: 8px;
+    font-size: 0.76rem;
+  }
+
   .game-stage,
   canvas {
-    min-height: 330px;
-    height: 330px;
+    min-height: 180px;
+    height: 180px;
   }
 
   .choice-grid {

@@ -28,7 +28,7 @@ export const FREE_MODIFIERS: Modifier[] = [
   { id: 'boost', name: 'Score push', description: 'Adds 35% score with a tighter window.' },
   { id: 'rotate', name: 'Lane turn', description: 'Rotates the note lanes each track.' },
   { id: 'dense', name: 'Extra taps', description: 'Adds off-beat notes worth more points.' },
-  { id: 'steady', name: 'Steady count', description: 'Keeps each phrase to four clear beats.' },
+  { id: 'steady', name: 'Steady count', description: 'Uses a repeating lane pattern.' },
 ];
 
 export const GROOVE_SETS = [
@@ -246,11 +246,14 @@ export class PulseGame {
     const random = mulberry32(this.seed + this.track * 7_919);
     const beat = 400;
     const dense = this.modifiers.includes('dense');
+    const steady = this.modifiers.includes('steady');
     const notes: Note[] = [];
     let id = this.track * 1_000;
     for (let phrase = 0; phrase < 15; phrase += 1) {
       for (let beatIndex = 0; beatIndex < 4; beatIndex += 1) {
-        const lane = Math.floor(random() * LANES);
+        const lane = steady
+          ? (phrase + beatIndex) % LANES
+          : Math.floor(random() * LANES);
         notes.push({ id: id++, lane, at: phrase * 2_000 + beatIndex * beat + 350, phrase, resolved: false, hit: false });
         if (dense && beatIndex % 2 === 1) {
           notes.push({ id: id++, lane: (lane + 2) % LANES, at: phrase * 2_000 + beatIndex * beat + 550, phrase, resolved: false, hit: false });

@@ -8,7 +8,7 @@ Audited 6 September 2026. Words joined by a hyphen, a price, and a control key e
 | --- | ---: | --- |
 | Single-player browser game | 3 | Pass |
 | Play a three-minute rhythm run | 5 | Pass |
-| For keyboard players who want a short run with original percussion and no account setup. | 15 | Pass |
+| For keyboard players who want a short run with synthesized percussion and no account setup. | 15 | Pass |
 | Try it with sample data | 5 | Pass |
 | Start a real run | 4 | Pass |
 | The sample opens a seeded run with notes already moving. | 10 | Pass |
@@ -30,7 +30,7 @@ Interface labels also audited: Track (1), Time (1), Seed (1), Score (1), Setting
 | --- | ---: | --- |
 | How it works | 3 | Pass |
 | Finish six 30-second tracks | 4 | Pass |
-| Each choice changes the next note pattern, timing window, or score. | 11 | Pass |
+| Each change affects patterns, timing, scoring, controls, or missed-phrase protection. | 10 | Pass |
 | Match the notes | 3 | Pass |
 | Press D, F, J, and K when notes reach the line. | 11 | Pass |
 | You can remap every key. | 5 | Pass |
@@ -68,7 +68,7 @@ Interface labels also audited: Track (1), Time (1), Seed (1), Score (1), Setting
 | View Complete availability | 3 | Pass |
 | Checkout and license activation are not available yet. | 8 | Pass |
 | Pulse Run is a three-minute single-player rhythm game. | 8 | Pass |
-| Original procedural visuals and percussion by Param Factory. | 8 | Pass |
+| Procedural visuals and synthesized percussion by Param Factory. | 8 | Pass |
 
 ## Other game states and settings
 
@@ -104,4 +104,4 @@ Dynamic score, streak, time, and track values are numbers rather than prose.
 | The one-time paid content | Pulse Run Complete, shortened to Complete after first use |
 | Browser-persisted records and preferences | play data |
 
-The catalog line is 13 words, begins with a verb, is 95 characters, and contains no banned word.
+The catalog line is 13 words, begins with a verb, is 98 characters, and contains no banned word.

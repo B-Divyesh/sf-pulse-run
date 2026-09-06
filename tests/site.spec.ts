@@ -9,7 +9,7 @@ test('first screen states the job, audience, action, facts, and working game', a
 
   await expect(page).toHaveTitle('Pulse Run — Play a three-minute rhythm run');
   await expect(page.getByRole('heading', { level: 1, name: 'Play a three-minute rhythm run' })).toBeVisible();
-  await expect(page.getByText('For keyboard players who want a short run with original percussion and no account setup.')).toBeVisible();
+  await expect(page.getByText('For keyboard players who want a short run with synthesized percussion and no account setup.')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Try it with sample data' })).toBeVisible();
   await expect(page.locator('canvas')).toBeVisible();
   await expect(page.locator('main')).toHaveCount(1);
@@ -50,7 +50,7 @@ test('settings rejects duplicate lane keys and keeps the dialog open', async ({ 
   await expect(page.locator('#settings-dialog')).toHaveAttribute('open', '');
 });
 
-test('privacy deletion removes all product storage', async ({ page }) => {
+test('privacy deletion removes all product storage outside the claim sandbox', async ({ page }) => {
   await page.goto('/privacy');
   await page.evaluate(() => {
     localStorage.setItem('pulse-run:settings', '{}');
@@ -100,18 +100,20 @@ test('keyboard focus is visible and the settings dialog traps and restores focus
   await expect(page.getByRole('button', { name: 'Open game settings' })).toBeFocused();
 });
 
-test('phone layout has no horizontal overflow and shows the game in the first viewport', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
+test('an iPhone-sized first viewport shows a usable part of the game', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 664 });
   await page.goto('/');
   const result = await page.evaluate(() => {
     const canvas = document.querySelector('canvas')?.getBoundingClientRect();
     return {
       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
       canvasTop: canvas?.top ?? Number.POSITIVE_INFINITY,
+      canvasBottom: canvas?.bottom ?? Number.NEGATIVE_INFINITY,
     };
   });
   expect(result.overflow).toBe(0);
-  expect(result.canvasTop).toBeLessThan(844);
+  expect(result.canvasTop).toBeLessThan(568);
+  expect(Math.min(result.canvasBottom, 664) - result.canvasTop).toBeGreaterThanOrEqual(96);
   for (const button of await page.locator('.lane-button').all()) {
     const box = await button.boundingBox();
     expect(box?.height).toBeGreaterThanOrEqual(44);

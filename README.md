@@ -6,9 +6,11 @@ Live: <https://pulse-run.sociobot.in>
 
 ## Play
 
-Use D, F, J, and K, remap those keys, or use the four touch controls. The game synthesizes its original percussion after a play control or rhythm key is pressed. A wider timing setting reduces the precision required.
+Use D, F, J, and K, remap every lane key, or use the four touch controls. The game creates synthesized percussion only after a play control or rhythm key is pressed. A wider timing setting reduces the precision required.
 
 The free game includes one complete run, the Circuit percussion set, and six run changes. Pulse Run Complete is a $5 USD one-time offer with the Copper, Paper, and Glass percussion sets. It is not a subscription. Checkout and license activation require registration by the Sociobot billing operator. No purchase or activation is presented as working.
+
+Pulse Run is a single-player built-in game. It has no song uploads, user charts, rankings, or multiplayer rooms.
 
 ## Try the isolated sample
 
@@ -18,7 +20,7 @@ Sample state stays in JavaScript memory. It does not read or write the `pulse-ru
 
 ## Local data and privacy
 
-Real runs store settings, an in-progress run, completed-run counts, and the best score in local storage. Pulse Run has no accounts, analytics, advertising, tracking pixels, external scripts, or gameplay requests to another origin. The `/privacy` page can delete all product storage.
+Real runs store settings, an in-progress run, completed-run counts, and the best score in local storage. Real and sample play data stays in this browser. Pulse Run, including Complete, has no accounts, ads, analytics, tracking pixels, external scripts, or gameplay requests to another origin. The `/privacy` page can delete all product storage.
 
 ## Clean setup
 

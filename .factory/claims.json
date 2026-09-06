@@ -29,17 +29,17 @@
   },
   {
     "id": "local-play-data",
-    "claim": "Sample gameplay sends no gameplay or play data to another origin.",
+    "claim": "Real and sample play data stays in this browser. Gameplay sends no data to another origin.",
     "where": "first-screen fact, privacy page, README",
     "test": "npm run test:e2e -- --grep @claim:local-play-data",
-    "sandbox": "record every request through an entire sample finish and restart; assert requests are same-origin and no local-storage entry is created"
+    "sandbox": "record every request through a real finish and restart, then a sample finish; assert requests are same-origin, real storage remains local, and the sample leaves it unchanged"
   },
   {
     "id": "demo-isolation",
-    "claim": "The sample does not read or change real-run storage.",
+    "claim": "One click opens a seeded sample with a persistent Demo label. Reset starts it over without reading or changing real-run storage.",
     "where": "demo banner, privacy page, demo documentation",
     "test": "npm run test:e2e -- --grep @claim:demo-isolation",
-    "sandbox": "seed real storage with a sentinel, lose and reset the sample, then assert the sentinel is unchanged and sample state resets"
+    "sandbox": "fresh home page; enter the sample in one click, seed real storage with a sentinel, lose and reset the sample, then assert its label and prior result remain visible, the sentinel is unchanged, and sample state resets"
   },
   {
     "id": "one-time-offer",
@@ -54,6 +54,55 @@
     "where": "first-screen fact, game controls, README",
     "test": "npm run test:e2e -- --grep @claim:input-modes",
     "sandbox": "place deterministic playable notes, press the mapped keyboard key and touch control, and assert both increase score"
+  },
+  {
+    "id": "remappable-input",
+    "claim": "Every lane key can be remapped and played.",
+    "where": "How it works, settings dialog, README",
+    "test": "npm run test:e2e -- --grep @claim:remappable-input",
+    "sandbox": "fresh real run; remap all four lane keys through settings, play a deterministic note in each lane, and assert each input increases score"
+  },
+  {
+    "id": "free-run-changes",
+    "claim": "The free game includes one six-track run, one Circuit percussion set, and six run changes. Each change affects play.",
+    "where": "How it works, price section, terms, README",
+    "test": "npm run test:e2e -- --grep @claim:free-run-changes",
+    "sandbox": "fresh sample; apply each of six real change choices through the game engine and assert its timing, protection, score, controls, note count, or note pattern outcome while the free groove remains Circuit"
+  },
+  {
+    "id": "no-account-ads-tracking",
+    "claim": "Pulse Run, including Complete, starts without an account, ads, analytics, tracking pixels, or third-party scripts.",
+    "where": "first-screen copy, scope section, pricing, privacy page, README",
+    "test": "npm run test:e2e -- --grep @claim:no-account-ads-tracking",
+    "sandbox": "fresh real run and Complete availability page; start playing without an identity form or popup and record all browser requests to assert only same-origin resources load"
+  },
+  {
+    "id": "audio-gesture",
+    "claim": "Percussion starts only after a play control or rhythm key. Pulse Run does not record you.",
+    "where": "privacy page, README",
+    "test": "npm run test:e2e -- --grep @claim:audio-gesture",
+    "sandbox": "fresh sample with a getUserMedia spy; assert audio is locked before input, unlocks after a rhythm key, and never requests media"
+  },
+  {
+    "id": "assist-timing",
+    "claim": "A wider timing setting reduces the precision required.",
+    "where": "settings dialog, README",
+    "test": "npm run test:e2e -- --grep @claim:assist-timing",
+    "sandbox": "fresh real run; miss a note just outside the normal window, enable wider timing, then hit the same offset and assert score increases"
+  },
+  {
+    "id": "delete-play-data",
+    "claim": "The privacy control deletes all Pulse Run play data from this browser.",
+    "where": "privacy page, README",
+    "test": "npm run test:e2e -- --grep @claim:delete-play-data",
+    "sandbox": "fresh browser storage seeded with all three real-data keys; use the visible privacy control and assert storage is empty with a deletion status"
+  },
+  {
+    "id": "built-in-scope",
+    "claim": "Pulse Run is a single-player built-in game with no song uploads, user charts, rankings, or multiplayer rooms.",
+    "where": "scope section, README",
+    "test": "npm run test:e2e -- --grep @claim:built-in-scope",
+    "sandbox": "fresh real run; begin playing, assert no upload or ranking/room UI is available, and record that no WebSocket connection opens"
   },
   {
     "id": "frame-rate",

@@ -55,21 +55,29 @@ test('@claim:settings-persist keeps sound, assist, and key settings in a real br
   await expect(page.getByLabel('Lane 1 key')).toHaveValue('KeyA');
 });
 
-test('@claim:local-play-data sends no gameplay or play data to another origin', async ({ page }) => {
+test('@claim:local-play-data keeps real and sample play data in the browser', async ({ page }) => {
   const requests: string[] = [];
   page.on('request', (request) => requests.push(request.url()));
-  await page.goto('/demo?qa=1');
+  await page.goto('/?qa=1');
+  await page.getByRole('button', { name: 'Start a real run' }).click();
   await page.evaluate(() => window.__PULSE_QA__?.finishRun());
   await page.getByRole('button', { name: 'Play again' }).click();
 
   const storedKeys = await page.evaluate(() => Object.keys(localStorage));
-  expect(storedKeys).toEqual([]);
+  expect(storedKeys.some((key) => key.startsWith('pulse-run:'))).toBe(true);
+  await page.goto('/demo?qa=1');
+  await page.evaluate(() => window.__PULSE_QA__?.finishRun());
+  expect(await page.evaluate(() => Object.keys(localStorage))).toEqual(storedKeys);
   expect(requests.length).toBeGreaterThan(0);
   expect(requests.every((url) => new URL(url).origin === 'http://127.0.0.1:4173')).toBe(true);
 });
 
 test('@claim:demo-isolation resets sample play without reading or changing real data', async ({ page }) => {
-  await page.goto('/demo?qa=1');
+  await page.goto('/?qa=1');
+  await page.getByRole('button', { name: 'Try it with sample data' }).click();
+  await expect(page).toHaveURL('/demo');
+  await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
+  await expect(page.getByText('18,420')).toBeVisible();
   const sentinel = JSON.stringify({ bestScore: 4321, completedRuns: 2, startedRuns: 3 });
   await page.evaluate((value) => localStorage.setItem('pulse-run:stats', value), sentinel);
   await page.evaluate(() => window.__PULSE_QA__?.loseRun());
@@ -109,6 +117,122 @@ test('@claim:input-modes scores notes from both the keyboard and touch controls'
   await page.locator('[data-lane="1"]').dispatchEvent('pointerdown');
   const touchScore = await page.evaluate(() => window.__PULSE_QA__?.snapshot()?.score ?? 0);
   expect(touchScore).toBeGreaterThan(keyboardScore);
+});
+
+test('@claim:remappable-input plays each lane after the player remaps every key', async ({ page }) => {
+  const keys = ['KeyA', 'KeyS', 'KeyL', 'Semicolon'];
+  await page.goto('/?qa=1');
+  await page.getByRole('button', { name: 'Open game settings' }).click();
+  for (const [lane, key] of keys.entries()) {
+    await page.getByLabel(`Lane ${lane + 1} key`).selectOption(key);
+  }
+  await page.getByRole('button', { name: 'Save settings' }).click();
+
+  let score = 0;
+  for (const [lane, key] of keys.entries()) {
+    await page.evaluate((currentLane) => window.__PULSE_QA__?.placeNote(currentLane), lane);
+    await page.keyboard.press(key);
+    const nextScore = await page.evaluate(() => window.__PULSE_QA__?.snapshot()?.score ?? 0);
+    expect(nextScore).toBeGreaterThan(score);
+    score = nextScore;
+  }
+});
+
+test('@claim:free-run-changes gives the free game six changes with distinct play effects', async ({ page }) => {
+  await page.goto('/demo?qa=1');
+  const results = [];
+  for (const id of ['wide', 'shield', 'boost', 'rotate', 'dense', 'steady']) {
+    results.push(await page.evaluate((modifier) => window.__PULSE_QA__?.inspectModifier(modifier), id));
+  }
+  const byId = new Map(results.filter(Boolean).map((result) => [result!.id, result!]));
+
+  expect(byId.size).toBe(6);
+  expect([...byId.values()].every((result) => result.groove === 'circuit')).toBe(true);
+  expect(byId.get('wide')?.timingWindow).toBeGreaterThan(145);
+  expect(byId.get('shield')?.shield).toBe(1);
+  expect(byId.get('boost')).toMatchObject({ timingWindow: 125, multiplier: 1.35 });
+  expect(byId.get('rotate')?.rotatedInputWorks).toBe(true);
+  expect(byId.get('dense')?.noteCount).toBe(90);
+  expect(byId.get('steady')?.lanePattern).toEqual([0, 1, 2, 3, 1, 2, 3, 0]);
+});
+
+test('@claim:no-account-ads-tracking starts a real run without identity or third-party requests', async ({ page }) => {
+  const requests: string[] = [];
+  const openedPages: string[] = [];
+  page.on('request', (request) => requests.push(request.url()));
+  page.context().on('page', (opened) => openedPages.push(opened.url()));
+  await page.goto('/?qa=1');
+  await page.getByRole('button', { name: 'Start a real run' }).click();
+
+  await expect(page.locator('#game-overlay')).toBeHidden();
+  await expect(page.locator('dialog[open]')).toHaveCount(0);
+  expect(await page.locator('input[type="password"], input[autocomplete="email"]').count()).toBe(0);
+  await page.goto('/license');
+  await expect(page.getByRole('heading', { name: 'Get the complete rhythm set' })).toBeVisible();
+  expect(await page.locator('input[type="password"], input[autocomplete="email"]').count()).toBe(0);
+  expect(openedPages).toEqual([]);
+  expect(requests.length).toBeGreaterThan(0);
+  expect(requests.every((url) => new URL(url).origin === 'http://127.0.0.1:4173')).toBe(true);
+});
+
+test('@claim:audio-gesture creates percussion only after a player action and never records', async ({ page }) => {
+  await page.addInitScript(() => {
+    (window as Window & { __pulseMediaCalls?: number }).__pulseMediaCalls = 0;
+    const mediaDevices = navigator.mediaDevices;
+    if (!mediaDevices?.getUserMedia) return;
+    const original = mediaDevices.getUserMedia.bind(mediaDevices);
+    mediaDevices.getUserMedia = (...args) => {
+      (window as Window & { __pulseMediaCalls?: number }).__pulseMediaCalls! += 1;
+      return original(...args);
+    };
+  });
+  await page.goto('/demo?qa=1');
+  expect(await page.evaluate(() => window.__PULSE_QA__?.audioUnlocked())).toBe(false);
+  await page.keyboard.press('KeyD');
+  expect(await page.evaluate(() => window.__PULSE_QA__?.audioUnlocked())).toBe(true);
+  expect(await page.evaluate(() => (window as Window & { __pulseMediaCalls?: number }).__pulseMediaCalls)).toBe(0);
+});
+
+test('@claim:assist-timing accepts a wider hit after the player enables the timing setting', async ({ page }) => {
+  await page.goto('/?qa=1');
+  await page.evaluate(() => window.__PULSE_QA__?.placeNote(0, 190));
+  await page.keyboard.press('KeyD');
+  expect(await page.evaluate(() => window.__PULSE_QA__?.snapshot()?.score ?? 0)).toBe(0);
+
+  await page.getByRole('button', { name: 'Open game settings' }).click();
+  await page.getByLabel('Use wider timing').check();
+  await page.getByRole('button', { name: 'Save settings' }).click();
+  await page.evaluate(() => window.__PULSE_QA__?.placeNote(0, 190));
+  await page.keyboard.press('KeyD');
+  expect(await page.evaluate(() => window.__PULSE_QA__?.snapshot()?.score ?? 0)).toBeGreaterThan(0);
+});
+
+test('@claim:delete-play-data removes all real browser storage through the privacy control', async ({ page }) => {
+  await page.goto('/privacy');
+  await page.evaluate(() => {
+    localStorage.setItem('pulse-run:settings', '{}');
+    localStorage.setItem('pulse-run:stats', '{}');
+    localStorage.setItem('pulse-run:run', '{}');
+  });
+  await page.getByRole('button', { name: 'Delete my play data' }).click();
+
+  expect(await page.evaluate(() => Object.keys(localStorage))).toEqual([]);
+  await expect(page.getByRole('status')).toContainText('was deleted');
+});
+
+test('@claim:built-in-scope uses the built-in single-player game without upload or realtime connections', async ({ page }) => {
+  const sockets: string[] = [];
+  page.on('websocket', (socket) => sockets.push(socket.url()));
+  await page.goto('/?qa=1');
+  await page.getByRole('button', { name: 'Start a real run' }).click();
+
+  await expect(page.locator('#game-overlay')).toBeHidden();
+  expect(await page.locator('input[type="file"]').count()).toBe(0);
+  const hasRoomOrRankingControl = await page.locator('button, a, input, select').evaluateAll((controls) => controls.some((control) =>
+    /room code|leaderboard|competitive ranking|multiplayer/i.test((control.textContent ?? '') + (control.getAttribute('aria-label') ?? '')),
+  ));
+  expect(hasRoomOrRankingControl).toBe(false);
+  expect(sockets).toEqual([]);
 });
 
 test('@claim:frame-rate renders at least 50 fps with a phone viewport under 4x CPU throttling', async ({ page }) => {
