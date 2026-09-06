@@ -8,7 +8,7 @@ Artifact class: `browser-game`
 
 ## Version record
 
-- Implementation and documentation baseline: `e92afadd2c409d4fd343c7a681ae942c9dd3b519`
+- Implementation and documentation baseline: `369aedae71a4bfb2eefbd6c4805d8902ed3e2e6b`
 - Deployed artifact: production `dist/` built from that SHA
 - Handoff: the report-only commit containing this file follows the deployed SHA and does not require another product image
 - Starting scaffold: `77a9b606fb2ec155634b577fe051c67bf0d80cf8`
@@ -42,7 +42,7 @@ Checkout registration and entitlement validation are not available. The `/licens
 
 ## Verification
 
-Final clean checkout: `/tmp/pulse-run-clean-e92afad`
+Final clean checkout: `/tmp/pulse-run-clean-369aeda`
 
 ```sh
 npm ci
@@ -56,7 +56,7 @@ Results from the clean checkout:
 - Vitest: 6 deterministic simulation tests passed.
 - Playwright: 26 browser checks passed in Chromium.
 - Every command in `.factory/claims.json` ran separately and passed.
-- Build output: 35.89 KB JavaScript (11.12 KB gzip), 11.92 KB CSS (3.57 KB gzip), and `dist/` created.
+- Build output: 35.91 KB JavaScript (11.13 KB gzip), 11.92 KB CSS (3.57 KB gzip), and `dist/` created.
 - Throttled phone-size frame measurement: 60.0 fps under 4× CPU throttling; the claim threshold is 50 fps.
 
 Browser coverage includes complete win, three-miss loss, restart reset, choices, keyboard and touch scoring, invalid duplicate mappings, settings persistence, refresh recovery, sample reset isolation, local request boundaries, route titles, History API focus, dialog focus, reduced motion, 44 px targets, 200% text, and mobile overflow.
